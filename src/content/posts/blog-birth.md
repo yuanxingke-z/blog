@@ -1,6 +1,6 @@
 ---
-title: "把博客从懒觉里拎起来"
-description: "在高考前夜，我终于给自己搭了一个博客：域名、托管、构建、分流，还有一个急需洗澡的程序员。"
+title: "把博客从懒觉里拎起来：一个程序员的个人博客建站记录"
+description: "记录我用 Astro、GitHub、阿里云 ESA 和 Vercel 搭建个人博客的第一天：域名、托管、DNS、分流、评论系统，还有一个急需洗澡的程序员。"
 pubDate: 2026-06-06
 tags: ["随笔", "博客", "建站", "程序员"]
 cover: "/images/blog-birth-realistic.png"

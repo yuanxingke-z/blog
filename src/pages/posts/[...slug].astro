@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import Comments from "../../components/Comments.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE } from "../../site.config";
 import { formatDate, getPublishedPosts } from "../../utils/posts";
 
 export async function getStaticPaths() {
@@ -22,9 +23,37 @@ const posts = await getPublishedPosts();
 const index = posts.findIndex((item) => item.id === post.id);
 const newerPost = index > 0 ? posts[index - 1] : undefined;
 const olderPost = index < posts.length - 1 ? posts[index + 1] : undefined;
+const postUrl = new URL(`/posts/${post.id}/`, SITE.url);
+const coverUrl = post.data.cover ? new URL(post.data.cover, SITE.url) : undefined;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.pubDate.toISOString(),
+  author: {
+    "@type": "Person",
+    name: SITE.author,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: SITE.title,
+  },
+  mainEntityOfPage: postUrl.toString(),
+  url: postUrl.toString(),
+  image: coverUrl?.toString(),
+  keywords: post.data.tags.join(", "),
+};
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.cover}
+  type="article"
+  structuredData={structuredData}
+>
   <article class="article-shell">
     <header class="article-header">
       <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
