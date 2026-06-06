@@ -29,26 +29,52 @@ const encodedUrl = encodeURIComponent(postUrl.toString());
 const encodedTitle = encodeURIComponent(post.data.title);
 const encodedDescription = encodeURIComponent(post.data.description);
 const encodedImage = coverUrl ? encodeURIComponent(coverUrl.toString()) : "";
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.data.title,
-  description: post.data.description,
-  datePublished: post.data.pubDate.toISOString(),
-  dateModified: post.data.pubDate.toISOString(),
-  author: {
-    "@type": "Person",
-    name: SITE.author,
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: post.data.pubDate.toISOString(),
+    author: {
+      "@type": "Person",
+      name: SITE.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.title,
+    },
+    mainEntityOfPage: postUrl.toString(),
+    url: postUrl.toString(),
+    image: coverUrl?.toString(),
+    keywords: post.data.tags.join(", "),
   },
-  publisher: {
-    "@type": "Organization",
-    name: SITE.title,
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "首页",
+        item: SITE.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "随笔",
+        item: new URL("/posts/", SITE.url).toString(),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.data.title,
+        item: postUrl.toString(),
+      },
+    ],
   },
-  mainEntityOfPage: postUrl.toString(),
-  url: postUrl.toString(),
-  image: coverUrl?.toString(),
-  keywords: post.data.tags.join(", "),
-};
+];
 ---
 
 <BaseLayout
@@ -74,7 +100,7 @@ const structuredData = {
     {
       post.data.cover && (
         <figure class="article-cover">
-          <img src={post.data.cover} alt="" />
+          <img src={post.data.cover} alt={post.data.coverAlt ?? post.data.title} />
         </figure>
       )
     }

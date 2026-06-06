@@ -7,6 +7,13 @@ import { getAllTags, getPublishedPosts } from "../utils/posts";
 const posts = await getPublishedPosts();
 const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 3);
 const tags = getAllTags(posts).slice(0, 8);
+const postItems = posts.slice(0, 10).map((post, index) => ({
+  "@type": "ListItem",
+  position: index + 1,
+  url: new URL(`/posts/${post.id}/`, SITE.url).toString(),
+  name: post.data.title,
+  description: post.data.description,
+}));
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -26,6 +33,12 @@ const structuredData = [
     name: SITE.author,
     url: SITE.url,
     description: "记录程序员日常、个人建站、AI 辅助编程、阅读与生活随笔。",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${SITE.title} 最新文章`,
+    itemListElement: postItems,
   },
 ];
 ---
