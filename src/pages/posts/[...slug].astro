@@ -25,6 +25,10 @@ const newerPost = index > 0 ? posts[index - 1] : undefined;
 const olderPost = index < posts.length - 1 ? posts[index + 1] : undefined;
 const postUrl = new URL(`/posts/${post.id}/`, SITE.url);
 const coverUrl = post.data.cover ? new URL(post.data.cover, SITE.url) : undefined;
+const encodedUrl = encodeURIComponent(postUrl.toString());
+const encodedTitle = encodeURIComponent(post.data.title);
+const encodedDescription = encodeURIComponent(post.data.description);
+const encodedImage = coverUrl ? encodeURIComponent(coverUrl.toString()) : "";
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -51,7 +55,10 @@ const structuredData = {
   title={post.data.title}
   description={post.data.description}
   image={post.data.cover}
+  keywords={post.data.tags}
   type="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  tags={post.data.tags}
   structuredData={structuredData}
 >
   <article class="article-shell">
@@ -75,6 +82,43 @@ const structuredData = {
     <div class="prose">
       <Content />
     </div>
+
+    <aside class="share-box" aria-labelledby="share-title">
+      <div>
+        <h2 id="share-title">觉得有点意思？</h2>
+        <p>顺手分享给同样想搭个人博客、或者正在和配置文件对视的人。</p>
+      </div>
+      <div class="share-actions">
+        <a href={`https://service.weibo.com/share/share.php?url=${encodedUrl}&title=${encodedTitle}&pic=${encodedImage}`} target="_blank" rel="noopener noreferrer">微博</a>
+        <a href={`https://connect.qq.com/widget/shareqq/index.html?url=${encodedUrl}&title=${encodedTitle}&summary=${encodedDescription}&pics=${encodedImage}`} target="_blank" rel="noopener noreferrer">QQ</a>
+        <a href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">X</a>
+        <button type="button" data-copy-url={postUrl.toString()}>复制链接</button>
+      </div>
+    </aside>
+
+    <script>
+      document.querySelectorAll("[data-copy-url]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const url = button.getAttribute("data-copy-url");
+          if (!url) return;
+          if (navigator.clipboard) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            const input = document.createElement("input");
+            input.value = url;
+            document.body.append(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+          }
+          button.textContent = "已复制";
+          window.setTimeout(() => {
+            button.textContent = "复制链接";
+          }, 1800);
+        });
+      });
+    </script>
 
     <Comments path={`/posts/${post.id}/`} />
 
