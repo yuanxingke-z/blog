@@ -9,6 +9,7 @@ export const SITE = {
     { label: "首页", href: "/" },
     { label: "随笔", href: "/posts/" },
     { label: "标签", href: "/tags/" },
+    { label: "搜索", href: "/search/" },
     { label: "关于", href: "/about/" },
   ],
 };

@@ -21,6 +21,13 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 const image = new URL(Astro.props.image ?? SITE.defaultImage, SITE.url);
 const keywords = Astro.props.keywords?.join(", ");
 const type = Astro.props.type ?? "website";
+const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
+const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+const webmasterVerifications = [
+  ["google-site-verification", import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION],
+  ["baidu-site-verification", import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION],
+  ["msvalidate.01", import.meta.env.PUBLIC_BING_SITE_VERIFICATION],
+].filter(([, content]) => Boolean(content));
 ---
 
 <!doctype html>
@@ -32,10 +39,17 @@ const type = Astro.props.type ?? "website";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="alternate" type="application/feed+json" title={SITE.title} href="/feed.json" />
+    <link rel="search" type="application/opensearchdescription+xml" title={SITE.title} href="/opensearch.xml" />
     <link rel="canonical" href={canonical} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
+    {
+      webmasterVerifications.map(([name, content]) => (
+        <meta name={name} content={content} />
+      ))
+    }
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
@@ -52,6 +66,11 @@ const type = Astro.props.type ?? "website";
     {
       Astro.props.structuredData && (
         <script type="application/ld+json" set:html={JSON.stringify(Astro.props.structuredData)} />
+      )
+    }
+    {
+      umamiSrc && umamiWebsiteId && (
+        <script defer src={umamiSrc} data-website-id={umamiWebsiteId}></script>
       )
     }
   </head>
@@ -76,7 +95,11 @@ const type = Astro.props.type ?? "website";
     </main>
     <footer class="site-footer">
       <p>© {new Date().getFullYear()} {SITE.author} · 用 Astro 记录平凡日子</p>
-      <a href="/rss.xml">RSS</a>
+      <div class="footer-links">
+        <a href="/search/">搜索</a>
+        <a href="/rss.xml">RSS</a>
+        <a href="/feed.json">JSON Feed</a>
+      </div>
     </footer>
   </body>
 </html>

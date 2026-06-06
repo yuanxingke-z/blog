@@ -1,7 +1,9 @@
 ---
 import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE } from "../../site.config";
 import { getAllTags, getPublishedPosts } from "../../utils/posts";
+import { getTagDescription } from "../../utils/tags";
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -15,13 +17,34 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
+const tagDescription = getTagDescription(tag);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `#${tag}`,
+  description: tagDescription,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: posts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: post.data.title,
+      url: new URL(`/posts/${post.id}/`, SITE.url).toString(),
+    })),
+  },
+};
 ---
 
-<BaseLayout title={`#${tag}`} description={`浏览标签 ${tag} 下的生活随笔。`}>
+<BaseLayout
+  title={`#${tag}`}
+  description={tagDescription}
+  keywords={[tag, "个人博客", "生活随笔", "程序员博客"]}
+  structuredData={structuredData}
+>
   <section class="container page-hero">
     <span class="section-kicker">Tag</span>
     <h1 class="page-title">#{tag}</h1>
-    <p>这个标签下共有 {posts.length} 篇随笔。</p>
+    <p>{tagDescription} 这个标签下共有 {posts.length} 篇随笔。</p>
   </section>
 
   <section class="container section">

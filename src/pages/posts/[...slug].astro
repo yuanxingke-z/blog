@@ -23,6 +23,16 @@ const posts = await getPublishedPosts();
 const index = posts.findIndex((item) => item.id === post.id);
 const newerPost = index > 0 ? posts[index - 1] : undefined;
 const olderPost = index < posts.length - 1 ? posts[index + 1] : undefined;
+const relatedPosts = posts
+  .filter((item) => item.id !== post.id)
+  .map((item) => ({
+    post: item,
+    score: item.data.tags.filter((tag) => post.data.tags.includes(tag)).length,
+  }))
+  .filter((item) => item.score > 0)
+  .sort((a, b) => b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map((item) => item.post);
 const postUrl = new URL(`/posts/${post.id}/`, SITE.url);
 const coverUrl = post.data.cover ? new URL(post.data.cover, SITE.url) : undefined;
 const encodedUrl = encodeURIComponent(postUrl.toString());
@@ -74,6 +84,21 @@ const structuredData = [
       },
     ],
   },
+  ...(relatedPosts.length
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `${post.data.title} 的相关文章`,
+          itemListElement: relatedPosts.map((relatedPost, relatedIndex) => ({
+            "@type": "ListItem",
+            position: relatedIndex + 1,
+            name: relatedPost.data.title,
+            url: new URL(`/posts/${relatedPost.id}/`, SITE.url).toString(),
+          })),
+        },
+      ]
+    : []),
 ];
 ---
 
@@ -147,6 +172,29 @@ const structuredData = [
     </script>
 
     <Comments path={`/posts/${post.id}/`} />
+
+    {
+      relatedPosts.length > 0 && (
+        <aside class="related-posts" aria-labelledby="related-title">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Related</span>
+              <h2 id="related-title">继续读点相近的</h2>
+            </div>
+            <a class="text-link" href="/posts/">全部随笔</a>
+          </div>
+          <div class="related-grid">
+            {relatedPosts.map((relatedPost) => (
+              <a class="related-card" href={`/posts/${relatedPost.id}/`}>
+                <time datetime={relatedPost.data.pubDate.toISOString()}>{formatDate(relatedPost.data.pubDate)}</time>
+                <h3>{relatedPost.data.title}</h3>
+                <p>{relatedPost.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )
+    }
 
     <nav class="post-nav" aria-label="文章导航">
       {newerPost ? <a href={`/posts/${newerPost.id}/`}><span>上一篇</span>{newerPost.data.title}</a> : <span></span>}
