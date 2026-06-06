@@ -1,0 +1,57 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Comments from "../../components/Comments.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, getPublishedPosts } from "../../utils/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const posts = await getPublishedPosts();
+const index = posts.findIndex((item) => item.id === post.id);
+const newerPost = index > 0 ? posts[index - 1] : undefined;
+const olderPost = index < posts.length - 1 ? posts[index + 1] : undefined;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="article-shell">
+    <header class="article-header">
+      <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+      <h1>{post.data.title}</h1>
+      <p>{post.data.description}</p>
+      <div class="tag-row">
+        {post.data.tags.map((tag) => <a href={`/tags/${tag}/`}>#{tag}</a>)}
+      </div>
+    </header>
+
+    {
+      post.data.cover && (
+        <figure class="article-cover">
+          <img src={post.data.cover} alt="" />
+        </figure>
+      )
+    }
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <Comments path={`/posts/${post.id}/`} />
+
+    <nav class="post-nav" aria-label="文章导航">
+      {newerPost ? <a href={`/posts/${newerPost.id}/`}><span>上一篇</span>{newerPost.data.title}</a> : <span></span>}
+      {olderPost ? <a href={`/posts/${olderPost.id}/`}><span>下一篇</span>{olderPost.data.title}</a> : <span></span>}
+    </nav>
+  </article>
+</BaseLayout>

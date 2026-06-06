@@ -1,0 +1,21 @@
+---
+import PostCard from "../../components/PostCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedPosts } from "../../utils/posts";
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="随笔" description="按时间整理的全部生活随笔。">
+  <section class="container page-hero">
+    <span class="section-kicker">Archive</span>
+    <h1 class="page-title">全部随笔</h1>
+    <p>从最近写下的片段开始，慢慢往回翻。</p>
+  </section>
+
+  <section class="container section">
+    <div class="post-list">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

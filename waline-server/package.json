@@ -1,0 +1,11 @@
+{
+  "name": "blog-waline-server",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "@waline/vercel": "^1.40.3"
+  }
+}

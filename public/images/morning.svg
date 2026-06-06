@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-label="清晨街道插画">
+  <rect width="1200" height="750" fill="#e8f0ed"/>
+  <rect y="430" width="1200" height="320" fill="#d8c9b4"/>
+  <circle cx="965" cy="150" r="88" fill="#e7b35d"/>
+  <rect x="120" y="215" width="270" height="270" rx="8" fill="#f8f3ea"/>
+  <rect x="455" y="175" width="210" height="310" rx="8" fill="#ffffff"/>
+  <rect x="730" y="245" width="300" height="240" rx="8" fill="#f6eadf"/>
+  <path d="M0 510 C 230 460, 430 590, 650 525 S 1040 475, 1200 535 L 1200 750 L 0 750 Z" fill="#2e6f6b" opacity=".22"/>
+  <path d="M150 565 H1040" stroke="#8a7a68" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="292" cy="560" r="26" fill="#b5533a"/>
+  <circle cx="330" cy="560" r="26" fill="#b5533a"/>
+  <path d="M292 560 L330 510 L370 560" fill="none" stroke="#25211d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

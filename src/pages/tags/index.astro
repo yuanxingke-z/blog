@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllTags, getPublishedPosts } from "../../utils/posts";
+
+const posts = await getPublishedPosts();
+const tags = getAllTags(posts);
+---
+
+<BaseLayout title="标签" description="按主题浏览所有随笔标签。">
+  <section class="container page-hero">
+    <span class="section-kicker">Tags</span>
+    <h1 class="page-title">标签</h1>
+    <p>每个标签都是一条小径，通向某一类反复出现的心情和场景。</p>
+  </section>
+
+  <section class="container section">
+    <div class="tag-cloud">
+      {
+        tags.map((tag) => {
+          const count = posts.filter((post) => post.data.tags.includes(tag)).length;
+          return <a href={`/tags/${tag}/`}>#{tag} · {count}</a>;
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../site.config";
+---
+
+<BaseLayout title="关于" description={`关于 ${SITE.title} 和写作者。`}>
+  <section class="container page-hero">
+    <span class="section-kicker">About</span>
+    <h1 class="page-title">关于这里</h1>
+    <p>
+      这是一个用于安放生活随笔的个人博客。它不追求更新频率，只希望每次写下来的东西都足够真诚、清楚，也能在很久以后重新读懂。
+    </p>
+  </section>
+
+  <section class="container section">
+    <div class="hero-panel">
+      <h2>可以替换成你的介绍</h2>
+      <p>
+        你可以在这里写自己的城市、职业、兴趣、联系方式，或者只留下一段简单的话。
+        文件位置是 <code>src/pages/about.astro</code>。
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import "../styles/global.css";
+import { SITE } from "../site.config";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const pageTitle = Astro.props.title
+  ? `${Astro.props.title} · ${SITE.title}`
+  : SITE.title;
+const description = Astro.props.description ?? SITE.description;
+const canonical = new URL(Astro.url.pathname, SITE.url);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="canonical" href={canonical} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label={`${SITE.title} 首页`}>
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>{SITE.title}</span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        {
+          SITE.nav.map((item) => (
+            <a href={item.href} class:list={{ active: Astro.url.pathname === item.href }}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} {SITE.author} · 用 Astro 记录平凡日子</p>
+      <a href="/rss.xml">RSS</a>
+    </footer>
+  </body>
+</html>

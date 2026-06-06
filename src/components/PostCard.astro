@@ -1,0 +1,36 @@
+---
+import { formatDate } from "../utils/posts";
+
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      pubDate: Date;
+      tags: string[];
+      cover?: string;
+    };
+  };
+}
+
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  {
+    post.data.cover && (
+      <a class="post-card-cover" href={`/posts/${post.id}/`} aria-label={post.data.title}>
+        <img src={post.data.cover} alt="" loading="lazy" />
+      </a>
+    )
+  }
+  <div class="post-card-body">
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    <h2><a href={`/posts/${post.id}/`}>{post.data.title}</a></h2>
+    <p>{post.data.description}</p>
+    <div class="tag-row">
+      {post.data.tags.map((tag) => <a href={`/tags/${tag}/`}>#{tag}</a>)}
+    </div>
+  </div>
+</article>

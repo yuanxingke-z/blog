@@ -1,0 +1,57 @@
+---
+import "@waline/client/waline.css";
+
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const serverURL = import.meta.env.PUBLIC_WALINE_SERVER_URL;
+---
+
+<section class="comments" aria-labelledby="comments-title">
+  <div class="comments-head">
+    <span class="section-kicker">Comments</span>
+    <h2 id="comments-title">留言</h2>
+    <p>路过也可以留下一句话。评论提交后会直接显示。</p>
+  </div>
+  {
+    serverURL ? (
+      <div id="waline" data-comment-path={path} data-server-url={serverURL}></div>
+    ) : (
+      <div class="comments-empty">
+        <p>评论服务尚未配置。部署 Waline Server 后，设置 <code>PUBLIC_WALINE_SERVER_URL</code> 即可开启。</p>
+      </div>
+    )
+  }
+</section>
+
+{
+  serverURL && (
+    <script>
+      import { init } from "@waline/client";
+
+      const walineEl = document.querySelector("#waline");
+      const serverURL = walineEl?.getAttribute("data-server-url");
+      const path = walineEl?.getAttribute("data-comment-path");
+
+      if (!walineEl || !serverURL || !path) {
+        throw new Error("Waline comment container is not configured.");
+      }
+
+      init({
+        el: walineEl,
+        serverURL,
+        path,
+        lang: "zh-CN",
+        dark: false,
+        login: "disable",
+        meta: ["nick"],
+        requiredMeta: ["nick"],
+        pageview: false,
+        reaction: false,
+        search: false,
+      });
+    </script>
+  )
+}
