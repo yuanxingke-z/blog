@@ -3,7 +3,7 @@ title: "把博客从懒觉里拎起来"
 description: "在高考前夜，我终于给自己搭了一个博客：域名、托管、构建、分流，还有一个急需洗澡的程序员。"
 pubDate: 2026-06-06
 tags: ["随笔", "博客", "建站", "程序员"]
-cover: "/images/blog-birth.svg"
+cover: "/images/blog-birth-realistic.png"
 featured: true
 ---
 
