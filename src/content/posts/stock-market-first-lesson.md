@@ -3,6 +3,8 @@ title: "股市新手保护期，原来不包天秤座"
 description: "从周四盈利四千多到周一亏损三千七，一个股市小白在科技股里第一次体验了什么叫犹豫的代价。"
 pubDate: 2026-06-09
 tags: ["随笔", "股票", "小白入市", "科技股", "生活记录"]
+cover: "/images/stock-market-first-lesson.png"
+coverAlt: "夜晚书桌上的电脑显示抽象股票曲线，一只手停在鼠标旁边，像是在犹豫是否卖出。"
 featured: false
 draft: false
 ---
