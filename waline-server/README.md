@@ -7,8 +7,8 @@
 ```sh
 SITE_NAME=缓慢记录
 SITE_URL=https://blog.zhoub2.top
-SERVER_URL=https://your-waline-server.example.com
-SECURE_DOMAINS=blog.zhoub2.top,blog-brown-nu-53.vercel.app,your-waline-server.example.com
+SERVER_URL=https://blog-waline-server-olive.vercel.app
+SECURE_DOMAINS=blog.zhoub2.top,blog-brown-nu-53.vercel.app,blog-waline-server.vercel.app,blog-waline-server-olive.vercel.app,localhost,127.0.0.1
 COMMENT_AUDIT=true
 LOGIN=disable
 ```

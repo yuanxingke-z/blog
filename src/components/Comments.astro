@@ -13,7 +13,7 @@ const serverURL = import.meta.env.PUBLIC_WALINE_SERVER_URL;
   <div class="comments-head">
     <span class="section-kicker">Comments</span>
     <h2 id="comments-title">留言</h2>
-    <p>路过也可以留下一句话。评论提交后会直接显示。</p>
+    <p>路过也可以留下一句话。填写邮箱后会自动显示对应头像。</p>
   </div>
   {
     serverURL ? (
@@ -46,8 +46,8 @@ const serverURL = import.meta.env.PUBLIC_WALINE_SERVER_URL;
         lang: "zh-CN",
         dark: false,
         login: "disable",
-        meta: ["nick"],
-        requiredMeta: ["nick"],
+        meta: ["nick", "mail"],
+        requiredMeta: ["nick", "mail"],
         pageview: false,
         reaction: false,
         search: false,
